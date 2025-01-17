@@ -1,0 +1,8 @@
+#chat-window {
+    height: 30rem;
+}
+
+#chat-window-messages {
+    height: 27rem;
+    overflow: auto;
+}

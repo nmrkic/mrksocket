@@ -1,0 +1,65 @@
+[project]
+name = "chat_service"
+requires-python = ">=3.13"
+version = "0.0.0"
+description = "Chat service python application"
+readme = "README.md"
+authors = [{ name = "Nebojsa Mrkic", email = "mrkic.nebojsa@gmail.com" }]
+dependencies = [
+    "mrkutil==1.7.0",
+    "jwt==1.3.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "watchfiles==0.24.0",
+    "ruff==0.7.4",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["./package"]
+
+
+[project.scripts]
+chat_service = "package.run:main"
+
+[tool.ruff]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+line-length = 80
+
+[tool.ruff.lint]
+ignore = ["E501"]
+
+[tool.ruff.format]
+exclude = ["*.pyi"]

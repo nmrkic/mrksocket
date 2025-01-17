@@ -1,0 +1,3 @@
+"""
+Scelet service namespace
+"""
