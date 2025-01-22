@@ -21,10 +21,7 @@ export default function Chat({ userToken, selectedRoom, webSocket }){
     useEffect(() => {
         if (webSocket.current){
             webSocket.current.onmessage = (event) => {
-            console.log("Uslo");
             const ReceiveMessageRoomDto = JSON.parse(event.data);
-            console.log('Message:',  ReceiveMessageRoomDto);
-            console.log(selectedRoom);
 
             if (ReceiveMessageRoomDto.room === selectedRoom) {
                 setChatMessages([...chatMessages, {

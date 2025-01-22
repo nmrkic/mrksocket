@@ -4,8 +4,8 @@ const uWS = require("uWebSockets.js"),
   eventName = "ws-received",
   connectionsStore = require("../util/connectionsStore"),
   emitter = new events.EventEmitter(),
-  { v4: uuidv4 } = require('uuid'),
-  port = 8100;
+  { v4: uuidv4 } = require('uuid');
+let port = 8100;
 
 function start() {
   const app = uWS
@@ -44,8 +44,10 @@ function start() {
       message: (ws, message, isBinary) => {
         let receivedMessage;
         if (isBinary) {
+          console.log("Binary", message)
           receivedMessage = Buffer.from(message).toString();
         } else {
+          console.log("Not binary", message)
           receivedMessage = message;
         }
         const decoder = new TextDecoder();
@@ -53,6 +55,7 @@ function start() {
         let jsonReceivedMessage = JSON.parse(receivedMessage);
         logger.info(`Message from user ${ws.userID}: ${receivedMessage}`);
 
+        // TODO: Check why do we do this
         ws.subscribe();
 
         jsonReceivedMessage["message"]["token"] = ws.token;
@@ -80,6 +83,7 @@ function start() {
         logger.error(`Failed to listen on port ${port}`);
       }
     });
+    return app
 }
 
 subscribe = function subscribe(callback) {
