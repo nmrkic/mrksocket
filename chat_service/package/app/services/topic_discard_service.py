@@ -18,11 +18,8 @@ class TopicDiscardService(BaseTopicService):
     def name():
         return TOPIC_DISCARD
 
-    def process(self, data, corr_id):
-        print(data)
-
-        current_user = users_manager.get(data.get("token"))
-
+    def process(self, data, from_user, corr_id):
+        current_user = users_manager.get(from_user)
         room = rooms_manager.get(slugify(data.get("room")))
 
         logger.info(current_user)
@@ -35,7 +32,7 @@ class TopicDiscardService(BaseTopicService):
                 current_user["rooms"].remove(room.get("slug"))
 
                 rooms_manager.update(room.get("slug"), room)
-                users_manager.update(data.get("token"), current_user)
+                users_manager.update(data.get("from"), current_user)
 
                 if not room["users"]:
                     rooms_manager.delete(room.get("slug"))

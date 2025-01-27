@@ -17,11 +17,8 @@ class TopicAddService(BaseTopicService):
     def name():
         return TOPIC_ADD
 
-    def process(self, data, corr_id):
-        print(data)
-
-        current_user = users_manager.get(data.get("token"))
-
+    def process(self, data, from_user, corr_id):
+        current_user = users_manager.get(from_user)
         room = rooms_manager.get(slugify(data.get("room")))
 
         logger.info(current_user)
@@ -46,9 +43,8 @@ class TopicAddService(BaseTopicService):
                 current_user["rooms"].add(room.get("slug"))
             else:
                 current_user["rooms"] = {room.get("slug")}
-            users_manager.update(data.get("token"), current_user)
+            users_manager.update(data.get("from"), current_user)
 
-            print("Anes")
             print(current_user)
             print(room)
             print(rooms_manager.list())

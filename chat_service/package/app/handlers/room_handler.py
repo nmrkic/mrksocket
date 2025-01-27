@@ -13,4 +13,4 @@ class RoomHandler(BaseHandler):
         return 'topic_exchange'
 
     def process(self, data, corr_id):
-        return BaseTopicService.process_data(data.get("message"), corr_id)
+        return BaseTopicService.process_data(data.get("message"), data.get("from"), corr_id)

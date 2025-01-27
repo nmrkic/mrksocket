@@ -1,10 +1,11 @@
+const logger = require("../util/logger");
 let activeConnections = {},
     unauthorisedConnections = {};
 
 handleAuthorization = function handleAuthorization(request) {
     let ws = unauthorisedConnections[request?.data?.temp_user_id];
     if (!ws) {
-        console.error("Websocket connection not found.")
+        logger.error("Websocket connection not found.")
         return;
     }
     delete unauthorisedConnections[request.data.temp_user_id];
@@ -19,14 +20,13 @@ handleAuthorization = function handleAuthorization(request) {
 }
 
 handleMessage = function handleMessage(request) {
-    let ws = activeConnections[request.data.message.send_to];
+    let ws = activeConnections[request.data.send_to];
 
     if (ws == null) {
         return;
     }
 
     let message = request.data.message;
-    delete message["send_to"];
 
     let stringifiedMessage = JSON.stringify(message);
 

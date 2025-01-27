@@ -25,8 +25,8 @@ export default function Chat({ userToken, selectedRoom, webSocket }){
 
             if (ReceiveMessageRoomDto.room === selectedRoom) {
                 setChatMessages([...chatMessages, {
-                    user:  ReceiveMessageRoomDto.user,
-                    message:  ReceiveMessageRoomDto.status ? ReceiveMessageRoomDto.status : ReceiveMessageRoomDto.message
+                    user: ReceiveMessageRoomDto.user,
+                    message: ReceiveMessageRoomDto.status ? ReceiveMessageRoomDto.status : ReceiveMessageRoomDto.message
                 }]);
                 if(scrollBottomRef.current) {
                     scrollBottomRef.current.scrollIntoView({ behavior: 'smooth'});
@@ -57,8 +57,8 @@ export default function Chat({ userToken, selectedRoom, webSocket }){
                 JSON.stringify(new SendMessageRoomDto(selectedRoom, message))
             );
             setChatMessages([...chatMessages, {
-                user:  "You",
-                message:  message
+                user: "You",
+                message: message
             }]);
             setMessage('');
         }

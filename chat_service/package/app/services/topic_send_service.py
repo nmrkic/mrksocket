@@ -17,11 +17,8 @@ class TopicSendService(BaseTopicService):
     def name():
         return TOPIC_SEND
 
-    def process(self, data, corr_id):
-        print(data)
-
-        current_user = users_manager.get(data.get("token"))
-
+    def process(self, data, from_user, corr_id):
+        current_user = users_manager.get(data.get("from"))
         room = rooms_manager.get(slugify(data.get("room")))
 
         logger.info(current_user)

@@ -25,7 +25,7 @@ export default function Room(){
     const [userToken, setUserToken] = useState('');
 
     useEffect(() => {
-        if(userToken) {
+        if(userToken && userToken.lenght > 4) {
             console.log('Opening WebSocket');
             webSocket.current = new WebSocket(`ws://localhost:8100/?token=${userToken}`);
             const openWebSocket = () => {

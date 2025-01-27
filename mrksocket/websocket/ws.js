@@ -5,10 +5,10 @@ const uWS = require("uWebSockets.js"),
   connectionsStore = require("../util/connectionsStore"),
   emitter = new events.EventEmitter(),
   { v4: uuidv4 } = require('uuid');
-let port = 8100;
 
-function start() {
-  const app = uWS
+function start(ws_port) {
+  const port = ws_port || 8100
+    app = uWS
     .App()
     .ws("/*", {
       upgrade: (res, req, context) => {
@@ -44,10 +44,10 @@ function start() {
       message: (ws, message, isBinary) => {
         let receivedMessage;
         if (isBinary) {
-          console.log("Binary", message)
+          logger.info(`Binary ${message}`)
           receivedMessage = Buffer.from(message).toString();
         } else {
-          console.log("Not binary", message)
+          logger.info(`Not binary ${message}`)
           receivedMessage = message;
         }
         const decoder = new TextDecoder();
@@ -58,7 +58,7 @@ function start() {
         // TODO: Check why do we do this
         ws.subscribe();
 
-        jsonReceivedMessage["message"]["token"] = ws.token;
+        jsonReceivedMessage["from"] = ws.token;
 
         emitter.emit(eventName, jsonReceivedMessage);
       },
