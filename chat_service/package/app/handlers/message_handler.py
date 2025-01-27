@@ -14,10 +14,10 @@ class MessageHandler(BaseHandler):
         return 'direct_message'
 
     def process(self, data, corr_id):
-        message = data.get("message", {})
-        user = users_manager.get(message.get("token"))
+        from_user = data.get("from", None)
+        user = users_manager.get(data.get("to", None))
 
-        if user is None:
+        if user is None or from_user is None:
             return {
                 "method": "message_handler",
                 "message": {
@@ -26,7 +26,8 @@ class MessageHandler(BaseHandler):
             }
         else:
             del data["message"]["token"]
-            data["message"]["user_id"] = user.get("id")
+            data["message"]["from"] = from_user.get("id")
+            data["send_to"] = user.get("id")
 
             data['method'] = "direct_message"
 

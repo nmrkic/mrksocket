@@ -21,15 +21,12 @@ export default function Chat({ userToken, selectedRoom, webSocket }){
     useEffect(() => {
         if (webSocket.current){
             webSocket.current.onmessage = (event) => {
-            console.log("Uslo");
             const ReceiveMessageRoomDto = JSON.parse(event.data);
-            console.log('Message:',  ReceiveMessageRoomDto);
-            console.log(selectedRoom);
 
             if (ReceiveMessageRoomDto.room === selectedRoom) {
                 setChatMessages([...chatMessages, {
-                    user:  ReceiveMessageRoomDto.user,
-                    message:  ReceiveMessageRoomDto.status ? ReceiveMessageRoomDto.status : ReceiveMessageRoomDto.message
+                    user: ReceiveMessageRoomDto.user,
+                    message: ReceiveMessageRoomDto.status ? ReceiveMessageRoomDto.status : ReceiveMessageRoomDto.message
                 }]);
                 if(scrollBottomRef.current) {
                     scrollBottomRef.current.scrollIntoView({ behavior: 'smooth'});
@@ -60,8 +57,8 @@ export default function Chat({ userToken, selectedRoom, webSocket }){
                 JSON.stringify(new SendMessageRoomDto(selectedRoom, message))
             );
             setChatMessages([...chatMessages, {
-                user:  "You",
-                message:  message
+                user: "You",
+                message: message
             }]);
             setMessage('');
         }
