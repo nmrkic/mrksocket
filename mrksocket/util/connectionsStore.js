@@ -27,6 +27,7 @@ handleMessage = function handleMessage(request) {
     }
 
     let message = request.data.message;
+    delete message["send_to"];
 
     let stringifiedMessage = JSON.stringify(message);
 
@@ -34,10 +35,10 @@ handleMessage = function handleMessage(request) {
 }
 
 handleGroupMessage = function handleMessage(request) {
-    request?.data?.message.forEach((message) => {
-        let ws = activeConnections[message.user_id];
+    let message = request?.data?.message
+    request?.data?.send_to.forEach((user_id) => {
+        let ws = activeConnections[user_id];
         if (ws !== null) {
-            delete message["user_id"];
             let stringifiedMessage = JSON.stringify(message);
             ws.send(stringifiedMessage);
         }
