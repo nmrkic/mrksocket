@@ -1,10 +1,11 @@
+const logger = require("../util/logger");
 let activeConnections = {},
     unauthorisedConnections = {};
 
 handleAuthorization = function handleAuthorization(request) {
     let ws = unauthorisedConnections[request?.data?.temp_user_id];
     if (!ws) {
-        console.error("Websocket connection not found.")
+        logger.error("Websocket connection not found.")
         return;
     }
     delete unauthorisedConnections[request.data.temp_user_id];
@@ -19,7 +20,7 @@ handleAuthorization = function handleAuthorization(request) {
 }
 
 handleMessage = function handleMessage(request) {
-    let ws = activeConnections[request.data.message.send_to];
+    let ws = activeConnections[request.data.send_to];
 
     if (ws == null) {
         return;
@@ -34,10 +35,10 @@ handleMessage = function handleMessage(request) {
 }
 
 handleGroupMessage = function handleMessage(request) {
-    request?.data?.message.forEach((message) => {
-        let ws = activeConnections[message.user_id];
+    let message = request?.data?.message
+    request?.data?.send_to.forEach((user_id) => {
+        let ws = activeConnections[user_id];
         if (ws !== null) {
-            delete message["user_id"];
             let stringifiedMessage = JSON.stringify(message);
             ws.send(stringifiedMessage);
         }
@@ -45,7 +46,6 @@ handleGroupMessage = function handleMessage(request) {
 }
 
 handleTopicMessage = function handleMessage(request) {
-    console.log(request.data)
     let ws = activeConnections[request.data.user_id];
 
     let message = request.data.message;
@@ -53,16 +53,13 @@ handleTopicMessage = function handleMessage(request) {
 
     let stringifiedMessage = JSON.stringify(message);
 
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", roomId, activeConnections)
     ws.publish(roomId, stringifiedMessage);
 }
 
 handleTopicAdd = function handleMessage(request) {
-    console.log(request.data)
     let ws = activeConnections[request.data.user_id];
 
     let roomId = request.data.room_id;
-    console.log("user", request.data.user_id, "subscribed to room", roomId, ws)
 
     ws.subscribe(roomId);
 
@@ -70,7 +67,6 @@ handleTopicAdd = function handleMessage(request) {
 }
 
 handleTopicDiscard = function handleMessage(request) {
-    console.log(request.data)
     let ws = activeConnections[request.data.user_id];
 
     let message = request.data.message;

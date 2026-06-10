@@ -18,13 +18,13 @@ exports.publish = function publish(data) {
         context;
 
     logger.info(`Publishing ${text}`);
-    context = new Buffer(JSON.stringify({
+    context = new Buffer.from(JSON.stringify({
         "meta": {
             "correlationId": uuidv4(),
             "source": exchange_listen
         },
         "data": data
-    }));
+    }), 'utf-8');
     channel.publish(exchange, "", context);
 };
 

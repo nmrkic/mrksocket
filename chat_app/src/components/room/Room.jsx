@@ -25,7 +25,7 @@ export default function Room(){
     const [userToken, setUserToken] = useState('');
 
     useEffect(() => {
-        if(userToken) {
+        if(userToken && userToken.lenght > 4) {
             console.log('Opening WebSocket');
             webSocket.current = new WebSocket(`ws://localhost:8100/?token=${userToken}`);
             const openWebSocket = () => {
@@ -45,13 +45,10 @@ export default function Room(){
     }, [userToken]);
 
     const handleUserTokenChange = (event) => {
-        console.log("handleUserTokenChange");
-        console.log(event.target.value);
         setUserToken(event.target.value);
     }
 
     const handleRoomChange = (event) => {
-        console.log(event.target.value);
         setRoom(event.target.value);
     }
 
@@ -60,13 +57,11 @@ export default function Room(){
     }
 
     const changeRoom = (roomId) => {
-        console.log("changeRoom");
         setSelectedRoom(roomId);
     }
 
     const removeRoom = (event, roomId) => {
         event.stopPropagation();
-        console.log("removeRoom");
         webSocket.current.send(
             JSON.stringify(new RemoveRoomDto(roomId))
         );
